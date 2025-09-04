@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from myapp.models import Bookmark, LinkCollectionLike
+from myapp.models import Bookmark, LinkCollectionLike, UserAvatar
 from myapp.paginations import MainPageLinkCollectionPagination
 from myapp.serializers import UserSerializer, UserinfoSerializer, LinkCollectionListSerializer
 from myapp.tasks import delete_s3_object
@@ -131,7 +131,7 @@ class UserView(ModelViewSet):
                     user.save()
 
                 if new_avatar_url:
-                    avatar, created = user.avatar.get_or_create(user=user)
+                    avatar, created = UserAvatar.objects.get_or_create(user=user)
                     if not created and avatar.image_url:
                         # Extract key from CloudFront URL
                         old_avatar_key = avatar.image_url.replace(settings.AWS_CLOUDFRONT_URL + '/', '')
