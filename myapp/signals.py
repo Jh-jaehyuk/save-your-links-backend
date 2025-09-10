@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from myapp.models import Bookmark, UserAvatar, LinkCollection
+from myapp.models import Bookmark, UserAvatar, LinkCollection, LinkCollectionThumbnail
 
 
 @receiver(post_save, sender=User)
@@ -18,4 +18,4 @@ def create_user_avatar(sender, instance, created, **kwargs):
 @receiver(post_save, sender=LinkCollection)
 def create_link_collection_thumbnail(sender, instance, created, **kwargs):
     if created:
-        LinkCollection.objects.create(collection=instance)
+        LinkCollectionThumbnail.objects.create(collection=instance)
