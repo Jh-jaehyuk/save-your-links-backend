@@ -90,7 +90,7 @@ class LinkCollectionViewModel(models.Model):
         verbose_name = "조회"
         verbose_name_plural = "조회 목록"
         indexes = [
-            models.Index(fields=['liker', 'collection'])
+            models.Index(fields=['viewer', 'collection'])
         ]
 
 class UserAvatar(models.Model):
