@@ -7,15 +7,10 @@ from myapp.utils import get_boto3_client
 
 @shared_task
 def save_view_model(collection_id, user_id):
-    try:
-        LinkCollectionViewModel.objects.create(
-            collection_id=collection_id,
-            viewer_id=user_id
-        )
+    if LinkCollectionViewModel.objects.filter(collection_id=collection_id, viewer_id=user_id).exists():
+        return
 
-    except Exception as e:
-        print(f"Error saving view model: {e}")
-
+    LinkCollectionViewModel.objects.create(collection_id=collection_id, viewer_id=user_id)
 
 @shared_task
 def delete_s3_object(file_key):
