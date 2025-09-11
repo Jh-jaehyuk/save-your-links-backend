@@ -16,8 +16,8 @@ class LinkCollectionSerializer(serializers.ModelSerializer):
     thumbnail = LinkCollectionThumbnailSerializer(read_only=True)
     is_bookmarked = serializers.BooleanField(read_only=True)
     is_liked = serializers.BooleanField(read_only=True)
-    total_likes = serializers.IntegerField(read_only=True)
-    view_counts = serializers.IntegerField(read_only=True)
+    total_likes = serializers.IntegerField(source='likes_count', read_only=True)
+    view_counts = serializers.IntegerField(source='views_count', read_only=True)
     active_share_link = serializers.SerializerMethodField()
     thumbnail_image_url = serializers.URLField(write_only=True, required=False, allow_null=True)
 
