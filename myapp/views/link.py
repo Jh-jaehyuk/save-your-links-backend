@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 
-from myapp.models import Link
+from myapp.models import Link, LinkCollection
 from myapp.permissions import IsOwnerOrReadOnly
 from myapp.serializers import LinkSerializer
 
@@ -13,7 +13,10 @@ class LinkView(ModelViewSet):
     permission_classes = [IsOwnerOrReadOnly]
 
     def create(self, request, *args, **kwargs):
-        links = request.data
+        links = request.data.get('links', [])
+
+        if not links:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "links required."})
 
         if len(links) > 1:
             serializer = self.get_serializer(data=links, many=True)
