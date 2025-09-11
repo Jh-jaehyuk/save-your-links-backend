@@ -39,18 +39,12 @@ class LinkView(ModelViewSet):
         try:
             with transaction.atomic():
                 if added:
-                    collection = LinkCollection.objects.get(pk=added[0]['collection'])
-                    added_links = [Link(title=link['title'], url=link['url'], description=link['description'], collection=collection) for link in added]
+                    added_links = [Link(**link) for link in added]
                     Link.objects.bulk_create(added_links)
 
                 if updated:
-                    updated_links = []
-                    collection = LinkCollection.objects.get(pk=updated[0]['collection'])
-
-                    for link in updated:
-                        link['collection'] = collection
-                        updated_links.append(Link(**link))
-
+                    print(updated)
+                    updated_links = [Link(**link) for link in updated]
                     Link.objects.bulk_update(updated_links, ['title', 'url', 'description'])
 
                 if deleted:
