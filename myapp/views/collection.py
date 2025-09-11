@@ -205,11 +205,11 @@ class LinkCollectionView(ModelViewSet):
             qs = qs.filter(title__icontains=search_word)
 
         if filter_word == 'likes':
-            qs = qs.annotate(total_likes=Count('likes')).order_by('-total_likes', '-pk')
+            qs = qs.order_by('-total_likes', '-created_at')
         elif filter_word == 'views':
-            qs = qs.annotate(view_counts=Count('views')).order_by('-view_counts', '-pk')
+            qs = qs.order_by('-view_counts', '-created_at')
         else:
-            qs = qs.annotate(view_counts=Count('views')).order_by('-pk')
+            qs = qs.order_by('-created_at')
 
         pagination = MainPageLinkCollectionPagination()
         page = pagination.paginate_queryset(qs, request)
@@ -242,11 +242,11 @@ class LinkCollectionView(ModelViewSet):
         qs = LinkCollection.objects.select_related('owner').prefetch_related('links').filter(owner=user)
 
         if filter_word == 'likes':
-            qs = qs.annotate(total_likes=Count('likes')).order_by('-total_likes', '-pk')
+            qs = qs.order_by('-total_likes', '-created_at')
         elif filter_word == 'views':
-            qs = qs.annotate(view_counts=Count('views')).order_by('-view_counts', '-pk')
+            qs = qs.order_by('-view_counts', '-created_at')
         else:
-            qs = qs.order_by('-pk')
+            qs = qs.order_by('-created_at')
 
         pagination = MainPageLinkCollectionPagination()
         page = pagination.paginate_queryset(qs, request)
