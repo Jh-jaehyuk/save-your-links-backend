@@ -11,6 +11,8 @@ class LinkCollection(models.Model):
     is_public = models.BooleanField(default=False, verbose_name="링크 모음 공개 여부")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    likes_count = models.PositiveIntegerField(default=0, verbose_name="링크 모음 좋아요 개수")
+    views_count = models.PositiveIntegerField(default=0, verbose_name="링크 모음 조회 수")
     share_uuid = models.UUIDField(null=True, blank=False, verbose_name="링크 모음 공유 링크 UUID", db_index=True)
     expire_date = models.DateTimeField(null=True, blank=False, verbose_name="링크 모음 공유 링크 만료 기간")
 
@@ -29,6 +31,8 @@ class LinkCollection(models.Model):
             models.Index(fields=['owner']),
             models.Index(fields=['is_public']),
             models.Index(fields=['-created_at']),
+            models.Index(fields=['-likes_count']),
+            models.Index(fields=['-views_count'])
         ]
 
 class Link(models.Model):
