@@ -25,6 +25,11 @@ class LinkCollection(models.Model):
         db_table = "link_collections"
         verbose_name = "링크 모음"
         verbose_name_plural = "링크 모음 목록"
+        indexes = [
+            models.Index(fields=['owner']),
+            models.Index(fields=['is_public']),
+            models.Index(fields=['-created_at']),
+        ]
 
 class Link(models.Model):
     title = models.CharField(max_length=50, blank=False, null=False, verbose_name="링크 제목")
