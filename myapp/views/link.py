@@ -44,8 +44,14 @@ class LinkView(ModelViewSet):
                     Link.objects.bulk_create(added_links)
 
                 if updated:
-                    updated_links = [Link.objects.get(pk=link.id) for link in updated]
-                    Link.objects.bulk_update(updated_links, ['title', 'content', 'description'])
+                    updated_links = []
+                    collection = LinkCollection.objects.get(pk=updated[0]['collection'])
+
+                    for link in updated:
+                        link['collection'] = collection
+                        updated_links.append(Link(**link))
+
+                    Link.objects.bulk_update(updated_links, ['title', 'url', 'description'])
 
                 if deleted:
                     for link in deleted:
