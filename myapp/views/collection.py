@@ -206,8 +206,10 @@ class LinkCollectionView(ModelViewSet):
 
         if filter_word == 'likes':
             qs = qs.annotate(total_likes=Count('likes')).order_by('-total_likes', '-pk')
-        else:
+        elif filter_word == 'views':
             qs = qs.annotate(view_counts=Count('views')).order_by('-view_counts', '-pk')
+        else:
+            qs = qs.annotate(view_counts=Count('views')).order_by('-pk')
 
         pagination = MainPageLinkCollectionPagination()
         page = pagination.paginate_queryset(qs, request)
