@@ -1,4 +1,6 @@
+from django.db import transaction
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 
@@ -27,3 +29,30 @@ class LinkView(ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @action(methods=['post'], detail=False, url_path='batch')
+    def batch(self, request):
+        added = request.data.get('added', [])
+        updated = request.data.get('updated', [])
+        deleted = request.data.get('deleted', [])
+
+        try:
+            with transaction.atomic():
+                if added:
+                    collection = LinkCollection.objects.get(pk=added[0]['collection'])
+                    added_links = [Link(title=link['title'], url=link['url'], description=link['description'], collection=collection) for link in added]
+                    Link.objects.bulk_create(added_links)
+
+                if updated:
+                    updated_links = [Link.objects.get(pk=link.id) for link in updated]
+                    Link.objects.bulk_update(updated_links, ['title', 'content', 'description'])
+
+                if deleted:
+                    for link in deleted:
+                        Link.objects.get(pk=link['id']).delete()
+
+            return Response(status=status.HTTP_200_OK, data={"message": "batch 작업 성공"})
+
+        except Exception as e:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR, data={"error": str(e)})
+
