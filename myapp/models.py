@@ -89,6 +89,9 @@ class LinkCollectionViewModel(models.Model):
         ]
         verbose_name = "조회"
         verbose_name_plural = "조회 목록"
+        indexes = [
+            models.Index(fields=['liker', 'collection'])
+        ]
 
 class UserAvatar(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="avatar", verbose_name="아바타 소유자")
