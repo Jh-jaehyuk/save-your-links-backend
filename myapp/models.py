@@ -11,7 +11,7 @@ class LinkCollection(models.Model):
     is_public = models.BooleanField(default=False, verbose_name="링크 모음 공개 여부")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    share_uuid = models.UUIDField(null=True, blank=False, verbose_name="링크 모음 공유 링크 UUID")
+    share_uuid = models.UUIDField(null=True, blank=False, verbose_name="링크 모음 공유 링크 UUID", db_index=True)
     expire_date = models.DateTimeField(null=True, blank=False, verbose_name="링크 모음 공유 링크 만료 기간")
 
     def __str__(self):
