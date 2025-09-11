@@ -205,7 +205,7 @@ class LinkCollectionView(ModelViewSet):
             qs = qs.filter(title__icontains=search_word)
 
         if filter_word == 'likes':
-            qs = qs.order_by('-total_likes', '-created_at')
+            qs = qs.order_by('-likes_count', '-created_at')
         elif filter_word == 'views':
             qs = qs.order_by('-view_counts', '-created_at')
         else:
@@ -242,7 +242,7 @@ class LinkCollectionView(ModelViewSet):
         qs = LinkCollection.objects.select_related('owner').prefetch_related('links').filter(owner=user)
 
         if filter_word == 'likes':
-            qs = qs.order_by('-total_likes', '-created_at')
+            qs = qs.order_by('-likes_count', '-created_at')
         elif filter_word == 'views':
             qs = qs.order_by('-view_counts', '-created_at')
         else:
