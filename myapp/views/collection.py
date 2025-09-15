@@ -194,7 +194,7 @@ class LinkCollectionView(ModelViewSet):
                 user.bookmark.collections.values_list('id', flat=True)
             )
 
-        base_qs = LinkCollection.objects.select_related('owner').prefetch_related('links')
+        base_qs = LinkCollection.objects.select_related('owner', 'thumbnail').prefetch_related('links')
 
         if not user.is_authenticated:
             qs = base_qs.filter(is_public=True)
@@ -239,7 +239,7 @@ class LinkCollectionView(ModelViewSet):
             user.bookmark.collections.values_list('id', flat=True)
         )
 
-        qs = LinkCollection.objects.select_related('owner').prefetch_related('links').filter(owner=user)
+        qs = LinkCollection.objects.select_related('owner', 'thumbnail').prefetch_related('links').filter(owner=user)
 
         if filter_word == 'likes':
             qs = qs.order_by('-likes_count', '-created_at')
